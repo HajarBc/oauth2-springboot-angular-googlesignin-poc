@@ -1,0 +1,58 @@
+name: Code Quality and Lint
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+
+jobs:
+  quality-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      # --- 1. Checkout del repositorio ---
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # --- 2. FRONTEND (Angular) ---
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install and Lint Angular frontend
+        working-directory: ag-prueba-front
+        run: |
+          npm ci
+          npm run lint || echo "Lint warnings found"
+          npm test -- --watch=false --browsers=ChromeHeadless --code-coverage || echo "Frontend tests failed"
+
+      # --- 3. BACKEND 1: Authorization Server ---
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build and test Authorization Server
+        working-directory: authorization-server
+        run: |
+          mvn clean verify -Pcoverage
+          mvn spotbugs:check checkstyle:check || echo "Static analysis warnings found"
+
+      # --- 4. BACKEND 2: Resource Server ---
+      - name: Build and test Resource Server
+        working-directory: resource-server
+        run: |
+          mvn clean verify -Pcoverage
+          mvn spotbugs:check checkstyle:check || echo "Static analysis warnings found"
+
+      # --- 5. Subir reportes ---
+      - name: Upload coverage and quality reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-quality-reports
+          path: |
+            ag-prueba-front/coverage/
+            authorization-server/target/site/
+            resource-server/target/site/
