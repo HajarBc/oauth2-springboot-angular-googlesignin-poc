@@ -38,6 +38,7 @@ jobs:
         working-directory: authorization-server
         run: |
           mvn clean verify -DskipTests -Pcoverage
+          mvn jacoco:report
           mvn spotbugs:check checkstyle:check || echo "Static analysis warnings found"
 
       # --- 4. BACKEND 2: Resource Server ---
@@ -45,6 +46,7 @@ jobs:
         working-directory: resource-server
         run: |
           mvn clean verify -DskipTests -Pcoverage
+           mvn jacoco:report
           mvn spotbugs:check checkstyle:check || echo "Static analysis warnings found"
 
       # --- 5. Subir reportes ---
