@@ -49,6 +49,22 @@ jobs:
           mvn jacoco:report
           mvn spotbugs:check checkstyle:check || echo "Static analysis warnings found"
 
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: .
+        env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: java, javascript
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+
       # --- 5. Subir reportes ---
       - name: Upload coverage and quality reports
         uses: actions/upload-artifact@v4
