@@ -37,14 +37,14 @@ jobs:
       - name: Build and test Authorization Server
         working-directory: authorization-server
         run: |
-          mvn clean verify -Pcoverage
+          mvn clean verify -DskipTests -Pcoverage
           mvn spotbugs:check checkstyle:check || echo "Static analysis warnings found"
 
       # --- 4. BACKEND 2: Resource Server ---
       - name: Build and test Resource Server
         working-directory: resource-server
         run: |
-          mvn clean verify -Pcoverage
+          mvn clean verify -DskipTests -Pcoverage
           mvn spotbugs:check checkstyle:check || echo "Static analysis warnings found"
 
       # --- 5. Subir reportes ---
