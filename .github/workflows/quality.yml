@@ -48,13 +48,15 @@ jobs:
           mvn clean test -Dspring.profiles.active=test -Pcoverage
           mvn jacoco:report
           mvn spotbugs:check checkstyle:check || echo "Static analysis warnings found"
-
+       
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:
-          organization: "hajarbc"       # tu organización en SonarCloud
-          projectKey: "HajarBc_oauth2‑springboot‑angular‑googlesignin‑poc"
           projectBaseDir: .
+          args: >
+            -Dsonar.organization=hajarbc
+            -Dsonar.projectKey=HajarBc_oauth2-springboot-angular-googlesignin-poc
+
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
@@ -65,7 +67,6 @@ jobs:
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
-
 
       # --- 5. Subir reportes ---
       - name: Upload coverage and quality reports
