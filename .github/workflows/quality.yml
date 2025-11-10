@@ -52,6 +52,8 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:
+          organization: "hajarbc"       # tu organización en SonarCloud
+          projectKey: "HajarBc_oauth2‑springboot‑angular‑googlesignin‑poc"
           projectBaseDir: .
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
