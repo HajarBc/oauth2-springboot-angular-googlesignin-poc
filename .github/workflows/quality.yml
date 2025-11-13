@@ -49,16 +49,14 @@ jobs:
           mvn jacoco:report
           mvn spotbugs:check checkstyle:check || echo "Static analysis warnings found"
        
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          projectBaseDir: .
-          args: >
-            -Dsonar.organization=hajarbc
-            -Dsonar.projectKey=HajarBc_oauth2-springboot-angular-googlesignin-poc
-
+      - name: SonarCloud Scan with Maven
+        working-directory: .
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+        mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+        -Dsonar.organization=hajarbc \
+        -Dsonar.projectKey=HajarBc_oauth2-springboot-angular-googlesignin-poc
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
