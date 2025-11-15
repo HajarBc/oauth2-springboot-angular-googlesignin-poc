@@ -22,7 +22,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/myapp:${{ github.ref_name }}
+          tags: ghcr.io/${{ github.repository_owner | lower }}/myapp:${{ github.ref_name }}
 
       - name: Install Syft
         run: |
