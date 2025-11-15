@@ -1,15 +1,12 @@
-de la app
+FROM maven:3.9.2-eclipse-temurin-17
+
 WORKDIR /app
 
-# Copiar código
-COPY . .
+COPY authorization-server/ ./
 
-# Compilar (si tienes Maven)
-RUN chmod +x mvnw
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
 
-# Exponer puerto (Spring Boot típico)
 EXPOSE 8080
 
-# Ejecutar app
-CMD [java, -jar, target/*.jar]
+CMD ["java", "-jar", "target/*.jar"]
+
