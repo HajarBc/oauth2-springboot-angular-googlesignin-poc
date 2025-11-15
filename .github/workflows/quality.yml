@@ -58,7 +58,9 @@ jobs:
           mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.organization=hajarbc \
             -Dsonar.projectKey=HajarBc_oauth2-springboot-angular-googlesignin-poc \
-            -Dsonar.projectBaseDir=authorization-server
+            -Dsonar.projectBaseDir=authorization-server \
+            -Dsonar.modules=authorization-server \
+            -Dsonar.projectName="authorization-server"
 
       - name: SonarCloud Scan Resource Server
         working-directory: resource-server
@@ -68,13 +70,21 @@ jobs:
           mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.organization=hajarbc \
             -Dsonar.projectKey=HajarBc_oauth2-springboot-angular-googlesignin-poc \
-            -Dsonar.projectBaseDir=resource-server
-
+            -Dsonar.projectBaseDir=resource-server \
+            -Dsonar.modules=resource-server \
+            -Dsonar.projectName="resource-server"
+      
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: java, javascript
+          build-mode: manual
+
+      - name: Build Java projects for CodeQL
+        run: |
+          mvn -q -f authorization-server/pom.xml clean install -DskipTests
+          mvn -q -f resource-server/pom.xml clean install -DskipTests
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
