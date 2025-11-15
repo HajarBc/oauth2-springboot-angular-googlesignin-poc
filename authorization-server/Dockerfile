@@ -1,7 +1,4 @@
-# Base image
-FROM eclipse-temurin:17-jdk
-
-# Directorio de la app
+de la app
 WORKDIR /app
 
 # Copiar código
@@ -15,4 +12,4 @@ RUN ./mvnw clean package -DskipTests
 EXPOSE 8080
 
 # Ejecutar app
-CMD ["java", "-jar", "target/*.jar"]
+CMD [java, -jar, target/*.jar]
