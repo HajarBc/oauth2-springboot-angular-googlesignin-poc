@@ -50,29 +50,11 @@ jobs:
           mvn spotbugs:check checkstyle:check || echo "Static analysis warnings found"
             
 
-      - name: SonarCloud Scan Authorization Server
-        working-directory: authorization-server
+      - name: SonarCloud Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.organization=hajarbc \
-            -Dsonar.projectKey=HajarBc_oauth2-springboot-angular-googlesignin-poc \
-            -Dsonar.projectBaseDir=authorization-server \
-            -Dsonar.modules=authorization-server \
-            -Dsonar.projectName="authorization-server"
-
-      - name: SonarCloud Scan Resource Server
-        working-directory: resource-server
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.organization=hajarbc \
-            -Dsonar.projectKey=HajarBc_oauth2-springboot-angular-googlesignin-poc \
-            -Dsonar.projectBaseDir=resource-server \
-            -Dsonar.modules=resource-server \
-            -Dsonar.projectName="resource-server"
+          mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
       
 
       - name: Initialize CodeQL
