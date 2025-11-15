@@ -1,0 +1,23 @@
+name: PR policy checks
+
+on:
+  pull_request:
+
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Conftest on manifests
+        uses: instrumenta/conftest-action@v1
+        with:
+          files: k8s/*.yaml
+          policy: policy/
+
+      - name: Secret scan
+        run: |
+          pip install detect-secrets
+          detect-secrets scan > secrets_report || true
+          if grep -q "Potential secret" secrets_report; then
+            echo "Potential secret found - fail PR" && exit 1

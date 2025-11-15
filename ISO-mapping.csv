@@ -1,0 +1,3 @@
+control_id,descripcion,artefacto,estado
+A.14.2.5,Gestion de vulnerabilidades,trivy-report.json,pendiente
+A.12.6.1,Gestion de registros,SBOM (sbom.json),pendiente
