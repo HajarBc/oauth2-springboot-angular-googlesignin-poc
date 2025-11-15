@@ -22,7 +22,7 @@ jobs:
         with:
           context: ./authorization-server
           push: true
-          tags: ghcr.io/hajarbc/myapp:${{ github.ref_name }}
+          tags: ghcr.io/hajarbc/authorization-server:${{ github.ref_name }}
 
       - name: Install Syft
         run: |
