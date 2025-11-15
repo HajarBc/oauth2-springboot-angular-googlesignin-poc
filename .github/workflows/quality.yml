@@ -48,15 +48,28 @@ jobs:
           mvn clean test -Dspring.profiles.active=test -Pcoverage
           mvn jacoco:report
           mvn spotbugs:check checkstyle:check || echo "Static analysis warnings found"
-       
-      - name: SonarCloud Scan with Maven
-        working-directory: .
+            
+
+      - name: SonarCloud Scan Authorization Server
+        working-directory: authorization-server
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-           -Dsonar.organization=hajarbc \
-           -Dsonar.projectKey=HajarBc_oauth2-springboot-angular-googlesignin-poc
+          mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.organization=hajarbc \
+            -Dsonar.projectKey=HajarBc_oauth2-springboot-angular-googlesignin-poc \
+            -Dsonar.projectBaseDir=authorization-server
+
+      - name: SonarCloud Scan Resource Server
+        working-directory: resource-server
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.organization=hajarbc \
+            -Dsonar.projectKey=HajarBc_oauth2-springboot-angular-googlesignin-poc \
+            -Dsonar.projectBaseDir=resource-server
+
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
