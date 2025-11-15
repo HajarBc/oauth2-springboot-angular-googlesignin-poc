@@ -1,0 +1,17 @@
+# Base image
+FROM openjdk:17-jdk-slim
+
+# Directorio de la app
+WORKDIR /app
+
+# Copiar código
+COPY . .
+
+# Compilar (si tienes Maven)
+RUN ./mvnw clean package -DskipTests
+
+# Exponer puerto (Spring Boot típico)
+EXPOSE 8080
+
+# Ejecutar app
+CMD ["java", "-jar", "target/*.jar"]
