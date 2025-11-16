@@ -35,6 +35,28 @@ jobs:
         run: |
           syft ghcr.io/hajarbc/authorization-server:${{ github.ref_name }} -o cyclonedx-json=sbom.json
 
+      # --- AÑADIR: Instalar Grype ---
+      - name: Install Grype
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+
+      # --- AÑADIR: Escanear con Grype ---
+      - name: Scan with Grype (Fail on Critical VULNS)
+        # Escanea la imagen que subiste
+        # --fail-on permite fallar el workflow en el nivel de vulnerabilidad especificado.
+        # -o json guarda el resultado del escaneo.
+        run: |
+          grype ghcr.io/${{ github.repository_owner }}/authorization-server:${{ github.ref_name }} \
+            --fail-on critical \
+            -o json > grype-report.json
+        
+      # --- AÑADIR: Subir el Reporte de Vulnerabilidades ---
+      - name: Upload Grype Report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: grype-report-${{ github.ref_name }}
+          path: grype-report.json
+
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@v4
         with:
